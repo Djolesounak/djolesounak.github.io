@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Jonathan Catarino — Cybersécurité | Purple Team</title>
+<meta name="description" content="Portfolio de Jonathan Catarino — Cybersécurité, approche Purple Team. En recherche d'alternance cybersécurité.">
+<style>
+  :root{
+    --bg:#0a0712;
+    --bg-2:#100a1d;
+    --bg-card:#150e26;
+    --purple:#a855f7;
+    --purple-dim:#7c3aed;
+    --purple-soft:rgba(168,85,247,.12);
+    --red:#f43f5e;
+    --blue:#38bdf8;
+    --text:#e9e4f5;
+    --muted:#9b91b8;
+    --border:rgba(168,85,247,.18);
+    --mono:'Cascadia Code','Fira Code',Consolas,monospace;
+    --sans:'Segoe UI',system-ui,-apple-system,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--purple-dim);color:#fff}
+
+  /* ---------- fond animé ---------- */
+  .orbs{position:fixed;inset:0;z-index:-2;overflow:hidden}
+  .orb{position:absolute;border-radius:50%;filter:blur(110px);opacity:.35;animation:drift 18s ease-in-out infinite alternate}
+  .orb.p{width:520px;height:520px;background:#6d28d9;top:-140px;left:-120px}
+  .orb.r{width:380px;height:380px;background:#9f1239;bottom:-100px;left:30%;animation-delay:-6s}
+  .orb.b{width:420px;height:420px;background:#0c4a6e;top:20%;right:-140px;animation-delay:-12s}
+  @keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(60px,40px) scale(1.15)}}
+  .grid-overlay{position:fixed;inset:0;z-index:-1;
+    background-image:linear-gradient(rgba(168,85,247,.05) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(168,85,247,.05) 1px,transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(ellipse at 50% 30%,black 30%,transparent 75%);
+  }
+
+  /* ---------- nav ---------- */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 6vw;
+    background:rgba(10,7,18,.78);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);
+  }
+  .logo{font-family:var(--mono);font-size:1.05rem;color:var(--text);text-decoration:none}
+  .logo b{color:var(--purple)}
+  .logo .cursor{display:inline-block;width:9px;height:1.1em;background:var(--purple);vertical-align:text-bottom;animation:blink 1.1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .nav-links{display:flex;gap:26px;list-style:none}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:.92rem;transition:color .2s}
+  .nav-links a:hover{color:var(--purple)}
+  .nav-links a::before{content:'~/';color:var(--purple-dim);font-family:var(--mono);font-size:.8rem}
+  .burger{display:none;background:none;border:1px solid var(--border);color:var(--text);font-size:1.2rem;padding:4px 10px;border-radius:6px;cursor:pointer}
+
+  section{max-width:1080px;margin:0 auto;padding:90px 6vw 30px}
+  .section-title{font-family:var(--mono);font-size:1.6rem;margin-bottom:34px;display:flex;align-items:center;gap:14px}
+  .section-title::before{content:'>';color:var(--purple)}
+  .section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+
+  /* ---------- hero ---------- */
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:110px}
+  .hero-tag{font-family:var(--mono);color:var(--purple);font-size:.95rem;margin-bottom:14px}
+  h1{font-size:clamp(2.4rem,6vw,4.2rem);line-height:1.1;font-weight:800}
+  h1 .grad{background:linear-gradient(90deg,var(--red),var(--purple) 50%,var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero-sub{font-size:clamp(1.05rem,2.2vw,1.35rem);color:var(--muted);margin:18px 0 8px;max-width:640px}
+  .hero-sub b{color:var(--text)}
+
+  .terminal{
+    margin-top:36px;max-width:640px;
+    background:#0d0918;border:1px solid var(--border);border-radius:12px;
+    box-shadow:0 22px 60px rgba(0,0,0,.55),0 0 40px rgba(124,58,237,.08);
+    font-family:var(--mono);font-size:.92rem;overflow:hidden;
+  }
+  .term-bar{display:flex;align-items:center;gap:7px;padding:10px 14px;background:#160f29;border-bottom:1px solid var(--border)}
+  .term-bar span{width:11px;height:11px;border-radius:50%}
+  .term-bar .d1{background:#f43f5e}.term-bar .d2{background:#fbbf24}.term-bar .d3{background:#34d399}
+  .term-bar em{margin-left:10px;color:var(--muted);font-style:normal;font-size:.8rem}
+  .term-body{padding:16px 18px;min-height:130px}
+  .term-body .line{white-space:pre-wrap;word-break:break-word}
+  .prompt{color:var(--purple)}
+  .out{color:var(--muted)}
+  .ok{color:#34d399}
+  .term-cursor{display:inline-block;width:8px;height:1em;background:var(--text);vertical-align:text-bottom;animation:blink 1s steps(1) infinite}
+
+  .hero-btns{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;
+    padding:11px 22px;border-radius:9px;text-decoration:none;
+    font-family:var(--mono);font-size:.92rem;
+    border:1px solid var(--border);color:var(--text);
+    transition:transform .2s,box-shadow .2s,background .2s;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn.primary{background:linear-gradient(90deg,var(--purple-dim),var(--purple));border:none;color:#fff}
+  .btn.primary:hover{box-shadow:0 8px 28px rgba(168,85,247,.4)}
+  .btn.ghost:hover{background:var(--purple-soft);border-color:var(--purple)}
+  .btn svg{width:18px;height:18px;fill:currentColor}
+
+  /* ---------- purple team ---------- */
+  .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
+  .team-card{
+    background:var(--bg-card);border:1px solid var(--border);border-radius:14px;
+    padding:28px 24px;position:relative;overflow:hidden;
+    transition:transform .25s,box-shadow .25s;
+  }
+  .team-card:hover{transform:translateY(-5px)}
+  .team-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+  .team-card.red::before{background:linear-gradient(90deg,var(--red),transparent)}
+  .team-card.blue::before{background:linear-gradient(90deg,var(--blue),transparent)}
+  .team-card.purple::before{background:linear-gradient(90deg,var(--red),var(--purple),var(--blue))}
+  .team-card.red:hover{box-shadow:0 14px 40px rgba(244,63,94,.18)}
+  .team-card.blue:hover{box-shadow:0 14px 40px rgba(56,189,248,.18)}
+  .team-card.purple:hover{box-shadow:0 14px 40px rgba(168,85,247,.25)}
+  .team-card h3{font-family:var(--mono);margin-bottom:10px;font-size:1.1rem}
+  .team-card.red h3{color:var(--red)}
+  .team-card.blue h3{color:var(--blue)}
+  .team-card.purple h3{color:var(--purple)}
+  .team-card p{color:var(--muted);font-size:.95rem}
+  .team-card ul{margin-top:12px;list-style:none}
+  .team-card li{color:var(--muted);font-size:.9rem;padding:3px 0 3px 18px;position:relative}
+  .team-card li::before{content:'▸';position:absolute;left:0;color:inherit}
+  .team-card.red li::before{color:var(--red)}
+  .team-card.blue li::before{color:var(--blue)}
+  .team-card.purple li::before{color:var(--purple)}
+
+  /* ---------- skills ---------- */
+  .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px}
+  .skill-box{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:24px}
+  .skill-box h3{font-family:var(--mono);font-size:1rem;color:var(--purple);margin-bottom:16px}
+  .chips{display:flex;flex-wrap:wrap;gap:9px}
+  .chip{
+    font-family:var(--mono);font-size:.82rem;
+    padding:5px 13px;border-radius:999px;
+    background:var(--purple-soft);border:1px solid var(--border);color:var(--text);
+    transition:background .2s,border-color .2s;
+  }
+  .chip:hover{background:rgba(168,85,247,.25);border-color:var(--purple)}
+  .chip.progress{border-style:dashed;color:var(--muted)}
+  .legend{margin-top:18px;font-size:.8rem;color:var(--muted);font-family:var(--mono)}
+
+  .langs{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+  .lang{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--muted);background:var(--bg-card);border:1px solid var(--border);padding:8px 16px;border-radius:9px}
+  .lang b{color:var(--text)}
+  .lang span{font-family:var(--mono);color:var(--purple);font-size:.8rem}
+
+  /* ---------- timeline ---------- */
+  .timeline{position:relative;padding-left:34px}
+  .timeline::before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:2px;
+    background:linear-gradient(180deg,var(--red),var(--purple),var(--blue))}
+  .tl-item{position:relative;margin-bottom:36px}
+  .tl-item::before{content:'';position:absolute;left:-32px;top:7px;width:14px;height:14px;border-radius:50%;
+    background:var(--bg);border:3px solid var(--purple)}
+  .tl-item:first-child::before{border-color:var(--red)}
+  .tl-item:last-child::before{border-color:var(--blue)}
+  .tl-date{font-family:var(--mono);font-size:.8rem;color:var(--purple);margin-bottom:4px}
+  .tl-item h3{font-size:1.12rem}
+  .tl-item h4{font-size:.92rem;color:var(--muted);font-weight:500;margin-bottom:8px}
+  .tl-item p{color:var(--muted);font-size:.95rem;max-width:640px}
+
+  /* ---------- contact ---------- */
+  .contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+  .contact-card{
+    display:flex;align-items:center;gap:15px;
+    background:var(--bg-card);border:1px solid var(--border);border-radius:13px;
+    padding:20px;text-decoration:none;color:var(--text);
+    transition:transform .2s,border-color .2s,box-shadow .2s;
+  }
+  .contact-card:hover{transform:translateY(-3px);border-color:var(--purple);box-shadow:0 10px 30px rgba(168,85,247,.15)}
+  .contact-card svg{width:26px;height:26px;fill:var(--purple);flex-shrink:0}
+  .contact-card small{display:block;color:var(--muted);font-size:.78rem;font-family:var(--mono)}
+  .contact-card b{font-size:.95rem;font-weight:600;word-break:break-all}
+
+  footer{
+    margin-top:70px;padding:26px 6vw;text-align:center;
+    border-top:1px solid var(--border);
+    font-family:var(--mono);font-size:.82rem;color:var(--muted);
+  }
+  footer span{color:var(--purple)}
+
+  /* ---------- reveal ---------- */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.visible{opacity:1;transform:none}
+
+  @media (max-width:720px){
+    .nav-links{
+      position:fixed;top:57px;right:0;flex-direction:column;gap:0;
+      background:rgba(13,9,24,.97);border:1px solid var(--border);border-right:none;
+      border-radius:0 0 0 12px;padding:10px 0;min-width:190px;
+      transform:translateX(110%);transition:transform .3s;
+    }
+    .nav-links.open{transform:none}
+    .nav-links li{padding:10px 24px}
+    .burger{display:block}
+    .timeline{padding-left:28px}
+  }
+</style>
+</head>
+<body>
+
+<div class="orbs"><div class="orb p"></div><div class="orb r"></div><div class="orb b"></div></div>
+<div class="grid-overlay"></div>
+
+<nav>
+  <a class="logo" href="#top"><b>djolesounak</b>@purple-team:~$<span class="cursor"></span></a>
+  <button class="burger" id="burger" aria-label="menu">☰</button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">about</a></li>
+    <li><a href="#purple">purple-team</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#exp">parcours</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+</nav>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <p class="hero-tag">// portfolio cybersécurité</p>
+  <h1>Jonathan Catarino<br><span class="grad">Purple Team mindset</span></h1>
+  <p class="hero-sub"><b>Analyste SOC en alternance chez Clariane</b> — 3<sup>e</sup> année d'informatique, cursus cybersécurité.
+  J'attaque pour comprendre, je défends pour protéger.</p>
+
+  <div class="terminal reveal">
+    <div class="term-bar"><span class="d1"></span><span class="d2"></span><span class="d3"></span><em>djolesounak@kali: ~</em></div>
+    <div class="term-body" id="termBody"></div>
+  </div>
+
+  <div class="hero-btns">
+    <a class="btn primary" href="https://github.com/djolesounak" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      github.com/djolesounak
+    </a>
+    <a class="btn ghost" href="https://app.hackthebox.com/profile/2771839" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24"><path d="M12 1 2.5 6.5v11L12 23l9.5-5.5v-11L12 1zm0 2.3 7.5 4.33L12 11.96 4.5 7.63 12 3.3zM4.5 9.37l6.5 3.75v7.51l-6.5-3.76V9.37zm8.5 11.26v-7.51l6.5-3.75v7.5L13 20.63z"/></svg>
+      HTB : Djolesounak
+    </a>
+    <a class="btn ghost" href="#contact">./contact.sh</a>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section id="about">
+  <h2 class="section-title reveal">whoami</h2>
+  <div class="reveal" style="max-width:760px;color:var(--muted)">
+    <p>Après plusieurs années comme <b style="color:var(--text)">technicien chauffagiste</b>, j'ai choisi la reconversion qui me passionne : l'informatique, et plus précisément la <b style="color:var(--text)">cybersécurité</b>.</p>
+    <p style="margin-top:14px">Aujourd'hui en <b style="color:var(--text)">3<sup>e</sup> année d'informatique, cursus cybersécurité</b>, je suis <b style="color:var(--purple)">Analyste SOC en alternance chez Clariane</b> : surveillance, détection et analyse d'incidents de sécurité au quotidien.</p>
+    <p style="margin-top:14px">Certifié <b style="color:var(--text)">CCNA</b>, je prépare les certifications Microsoft Azure : <b style="color:var(--text)">AZ-900</b> (juillet 2026), <b style="color:var(--text)">AZ-104</b> (août–septembre 2026) puis <b style="color:var(--text)">AZ-500</b> d'ici fin 2026.</p>
+    <p style="margin-top:14px">Mon approche : la <b style="color:var(--purple)">purple team</b> — comprendre les techniques offensives (red) pour construire de meilleures défenses (blue). Je m'entraîne sur Hack The Box sous le pseudo <b style="color:var(--purple)">Djolesounak</b>.</p>
+  </div>
+</section>
+
+<!-- ================= PURPLE TEAM ================= -->
+<section id="purple">
+  <h2 class="section-title reveal">cat purple_team.md</h2>
+  <div class="team-grid">
+    <div class="team-card red reveal">
+      <h3>[RED] Offensive</h3>
+      <p>Penser comme un attaquant pour identifier les failles avant lui.</p>
+      <ul>
+        <li>Labs Hack The Box</li>
+        <li>Énumération &amp; reconnaissance</li>
+        <li>Scripting d'exploitation (Bash, Python)</li>
+      </ul>
+    </div>
+    <div class="team-card blue reveal">
+      <h3>[BLUE] Défensive</h3>
+      <p>Protéger, détecter et répondre aux incidents.</p>
+      <ul>
+        <li>Analyste SOC (Clariane)</li>
+        <li>Administration Linux / Windows</li>
+        <li>Réseaux — certifié CCNA</li>
+      </ul>
+    </div>
+    <div class="team-card purple reveal">
+      <h3>[PURPLE] Synergie</h3>
+      <p>Faire dialoguer attaque et défense pour élever le niveau global.</p>
+      <ul>
+        <li>Documentation &amp; transmission</li>
+        <li>Amélioration continue</li>
+        <li>Communication entre équipes</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SKILLS ================= -->
+<section id="skills">
+  <h2 class="section-title reveal">ls -la skills/</h2>
+  <div class="skills-grid">
+    <div class="skill-box reveal">
+      <h3>// systèmes</h3>
+      <div class="chips"><span class="chip">Linux</span><span class="chip">Windows</span><span class="chip">Active Directory</span></div>
+    </div>
+    <div class="skill-box reveal">
+      <h3>// réseau</h3>
+      <div class="chips"><span class="chip">TCP/IP</span><span class="chip">Routing &amp; Switching</span><span class="chip">CCNA ✓</span></div>
+    </div>
+    <div class="skill-box reveal">
+      <h3>// programmation</h3>
+      <div class="chips"><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">PowerShell</span><span class="chip">PHP</span><span class="chip">Java</span></div>
+    </div>
+    <div class="skill-box reveal">
+      <h3>// certifications</h3>
+      <div class="chips">
+        <span class="chip">CCNA ✓ obtenu</span>
+        <span class="chip progress">AZ-900 — juil. 2026</span>
+        <span class="chip progress">AZ-104 — août/sept. 2026</span>
+        <span class="chip progress">AZ-500 — fin 2026</span>
+      </div>
+      <p class="legend">[✓] = obtenu · [--] = en préparation</p>
+    </div>
+  </div>
+
+  <h2 class="section-title reveal" style="margin-top:60px">locale -a</h2>
+  <div class="langs reveal">
+    <div class="lang"><b>Français</b><span>natif</span></div>
+    <div class="lang"><b>Portugais</b><span>B2</span></div>
+    <div class="lang"><b>Anglais</b><span>B1</span></div>
+    <div class="lang"><b>Espagnol</b><span>B1</span></div>
+    <div class="lang"><b>Japonais</b><span>N5</span></div>
+  </div>
+</section>
+
+<!-- ================= PARCOURS ================= -->
+<section id="exp">
+  <h2 class="section-title reveal">git log --parcours</h2>
+  <div class="timeline">
+    <div class="tl-item reveal">
+      <p class="tl-date">2025 — aujourd'hui</p>
+      <h3>Analyste SOC (alternance)</h3>
+      <h4>Clariane — 3<sup>e</sup> année d'informatique, cursus cybersécurité</h4>
+      <p>Surveillance et analyse des événements de sécurité, détection et qualification d'incidents, réponse et amélioration continue de la défense.</p>
+    </div>
+    <div class="tl-item reveal">
+      <p class="tl-date">2023 — 2025</p>
+      <h3>Technicien Service Desk (alternance)</h3>
+      <h4>Clariane — Bac+2 TSTN obtenu, IPI Lyon (titre RNCP niveau 5)</h4>
+      <p>Support utilisateurs, gestion d'incidents, environnement Windows/Linux.</p>
+    </div>
+    <div class="tl-item reveal">
+      <p class="tl-date">2019 — 2023</p>
+      <h3>Technicien Chauffagiste</h3>
+      <h4>AMGAZ · ADIC 69</h4>
+      <p>Diagnostic de pannes, rigueur et méthodologie de troubleshooting — transposées à l'IT lors de ma reconversion.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact">
+  <h2 class="section-title reveal">./contact.sh --run</h2>
+  <p class="reveal" style="color:var(--muted);max-width:640px;margin-bottom:30px">
+    <b style="color:var(--purple)">Analyste SOC en alternance chez Clariane</b> — région lyonnaise. Ouvert aux échanges et aux opportunités en cybersécurité.
+  </p>
+  <div class="contact-grid">
+    <a class="contact-card reveal" id="mailCard" href="#">
+      <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      <div><small>email</small><b id="mailText">…</b></div>
+    </a>
+    <a class="contact-card reveal" href="https://github.com/djolesounak" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      <div><small>github</small><b>djolesounak</b></div>
+    </a>
+    <a class="contact-card reveal" href="https://app.hackthebox.com/profile/2771839" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24"><path d="M12 1 2.5 6.5v11L12 23l9.5-5.5v-11L12 1zm0 2.3 7.5 4.33L12 11.96 4.5 7.63 12 3.3zM4.5 9.37l6.5 3.75v7.51l-6.5-3.76V9.37zm8.5 11.26v-7.51l6.5-3.75v7.5L13 20.63z"/></svg>
+      <div><small>hack the box</small><b>Djolesounak</b></div>
+    </a>
+    <a class="contact-card reveal" href="https://www.linkedin.com/in/jonathan-catarino-903654171/" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 18.34V9.75H5.67v8.59h2.67zM7 8.48a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1zm11.34 9.86v-4.71c0-2.53-1.35-3.7-3.15-3.7-1.45 0-2.1.8-2.46 1.36V9.75h-2.67c.04.75 0 8.59 0 8.59h2.67v-4.8c0-.26.02-.51.1-.7.2-.51.66-1.04 1.43-1.04 1 0 1.41.77 1.41 1.9v4.64h2.67z"/></svg>
+      <div><small>linkedin</small><b>jonathan-catarino</b></div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p><span>djolesounak</span>@purple-team:~$ echo "Conçu avec un état d'esprit purple team — © 2026 Jonathan Catarino"</p>
+</footer>
+
+<script>
+/* ---------- terminal typing ---------- */
+const script = [
+  {cls:'prompt', text:'djolesounak@kali:~$ ', type:false},
+  {cls:'', text:'whoami', type:true},
+  {cls:'out', text:'\njonathan.catarino — Analyste SOC @ Clariane', type:false, delay:300},
+  {cls:'prompt', text:'\ndjolesounak@kali:~$ ', type:false, delay:400},
+  {cls:'', text:'sudo ./carriere --switch chauffagiste cybersecurite', type:true},
+  {cls:'ok', text:'\n[OK] Reconversion réussie — CCNA obtenu, cap sur AZ-900 / AZ-104 / AZ-500', type:false, delay:350},
+  {cls:'prompt', text:'\ndjolesounak@kali:~$ ', type:false, delay:400},
+];
+const termBody = document.getElementById('termBody');
+let li = 0;
+function runLine(){
+  if(li >= script.length){
+    const c = document.createElement('span');
+    c.className = 'term-cursor';
+    termBody.appendChild(c);
+    return;
+  }
+  const item = script[li++];
+  const span = document.createElement('span');
+  span.className = 'line ' + item.cls;
+  termBody.appendChild(span);
+  if(!item.type){
+    setTimeout(()=>{ span.textContent = item.text; runLine(); }, item.delay || 80);
+  } else {
+    let i = 0;
+    const iv = setInterval(()=>{
+      span.textContent += item.text[i++];
+      if(i >= item.text.length){ clearInterval(iv); setTimeout(runLine, 200); }
+    }, 45);
+  }
+}
+setTimeout(runLine, 600);
+
+/* ---------- scroll reveal ---------- */
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ---------- email anti-scraper (assemblé côté client) ---------- */
+(function(){
+  const u = ['jon','athan','.cat','arino'].join('');
+  const d = ['hot','mail','.com'].join('');
+  const card = document.getElementById('mailCard');
+  const addr = u + String.fromCharCode(64) + d;
+  card.href = 'mai' + 'lto:' + addr;
+  document.getElementById('mailText').textContent = addr;
+})();
+
+/* ---------- burger menu ---------- */
+const burger = document.getElementById('burger');
+const navLinks = document.getElementById('navLinks');
+burger.addEventListener('click', ()=> navLinks.classList.toggle('open'));
+navLinks.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> navLinks.classList.remove('open')));
+</script>
+</body>
+</html>
